@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Trinket LED Controller</title>
+  </head>
+  <body>
+    <h1>Trinket NeoPixel Controller</h1>
+    <button onclick="sendColor('red')">Red</button>
+    <button onclick="sendColor('green')">Green</button>
+    <button onclick="sendColor('blue')">Blue</button>
+    <button onclick="sendColor('off')">Off</button>
+    <br><br>
+    <button onclick="connect()">🔌 Connect to Trinket</button>
+
+    <script>
+      let port;
+      let writer;
+
+      async function connect() {
+        try {
+          port = await navigator.serial.requestPort();
+          await port.open({ baudRate: 115200 });
+          writer = port.writable.getWriter();
+          console.log("Connected to Trinket M0");
+        } catch (err) {
+          console.error("Failed to connect:", err);
+        }
+      }
+
+      async function sendColor(color) {
+        if (!writer) {
+          alert("Please connect to the Trinket first.");
+          return;
+        }
+        const data = new TextEncoder().encode(color + "\r\n");
+        await writer.write(data);
+      }
+    </script>
+  </body>
+</html>
