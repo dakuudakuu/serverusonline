@@ -1,17 +1,109 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Trinket LED Controller</title>
-  </head>
-  <body>
-    <h1>Trinket NeoPixel Controller</h1>
-    <button onclick="sendColor('red')">Red</button>
-    <button onclick="sendColor('green')">Green</button>
-    <button onclick="sendColor('blue')">Blue</button>
-    <button onclick="sendColor('off')">Off</button>
-    <br><br>
-    <button onclick="connect()">🔌 Connect to Trinket</button>
+	<head>
+		<title>Hand Raiser</title>
+	</head>
+    <style>
+* {
+	margin: 0;
+    padding: 0;
+    text: center;
+}
 
+#section {
+	display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+}
+
+#connectButton {
+	font-size: 18px;
+    padding: 6px;
+    border-radius: 10px;
+    background-color: rgb(230, 230, 230);
+}
+
+#connectButton:hover {
+	background-color: rgb(100, 100, 100);
+    color: white;
+}
+
+#buttons {
+	display: grid;
+     grid-template-columns: repeat(3, 1fr);
+     gap: 8px;
+     width: 100%;
+}
+
+.button {
+     font-size: 18px;
+	color: white;
+	padding: 60px;
+}
+
+#red {
+	background-color: darkred;
+}
+#red:hover {
+	background-color: red;
+    color: black;
+}
+
+#green {
+	background-color: darkgreen;
+}
+#green:hover {
+	background-color: green;
+    color: black;
+}
+
+#blue {
+	background-color: darkblue;
+}
+#blue:hover {
+	background-color: blue;
+    color: black;
+}
+
+#off {
+	background-color: black;
+}
+#off:hover {
+	background-color: grey;
+    color: black;
+}
+
+#yellow {
+	background-color: #b59f00;
+}
+#yellow:hover {
+	background-color: yellow;
+    color: black;
+}
+
+#magenta {
+	background-color: darkmagenta;
+}
+#magenta:hover {
+	background-color: magenta;
+    color: black;
+}
+    </style>
+	<body>
+		<div id="section">
+        	<h1>Automatic Hand-Raiser 8000</h1>
+            <button onclick="connect()" id="connectButton">Connect to Hand Raiser</button>
+			<div id="buttons">
+            	<button onclick="sendColor('red')" class="button" id="red"></button>
+        		<button onclick="sendColor('green')" class="button" id="green"></button>
+        		<button onclick="sendColor('blue')" class="button" id="blue"></button>
+			<button onclick="sendColor('yellow')" class="button" id="yellow"></button>
+			<button onclick="sendColor('magenta')" class="button" id="magenta"></button>
+        		<button onclick="sendColor('off')" class="button" id="off"></button>
+			</div>
+		</div>
     <script>
       let port;
       let writer;
@@ -32,9 +124,14 @@
           alert("Please connect to the Trinket first.");
           return;
         }
+	if(color == "off") {
+		document.body.style.backgroundColor = "white"
+	} else {
+		document.body.style.backgroundColor = color;
+	}
         const data = new TextEncoder().encode(color + "\r\n");
         await writer.write(data);
       }
     </script>
-  </body>
+	</body>
 </html>
