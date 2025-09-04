@@ -1,137 +1,139 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Hand Raiser</title>
-	</head>
-    <style>
-* {
-	margin: 0;
-    padding: 0;
-    text: center;
-}
 
-#section {
-	display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-    padding: 1rem;
-}
-
-#connectButton {
-	font-size: 18px;
-    padding: 6px;
-    border-radius: 10px;
-    background-color: rgb(230, 230, 230);
-}
-
-#connectButton:hover {
-	background-color: rgb(100, 100, 100);
-    color: white;
-}
-
-#buttons {
-	display: grid;
-     grid-template-columns: repeat(3, 1fr);
-     gap: 8px;
-     width: 100%;
-}
-
-.button {
-     font-size: 18px;
-	color: white;
-	padding: 60px;
-}
-
-#red {
-	background-color: darkred;
-}
-#red:hover {
-	background-color: red;
-    color: black;
-}
-
-#green {
-	background-color: darkgreen;
-}
-#green:hover {
-	background-color: green;
-    color: black;
-}
-
-#blue {
-	background-color: darkblue;
-}
-#blue:hover {
-	background-color: blue;
-    color: black;
-}
-
-#off {
-	background-color: black;
-}
-#off:hover {
-	background-color: grey;
-    color: black;
-}
-
-#yellow {
-	background-color: #b59f00;
-}
-#yellow:hover {
-	background-color: yellow;
-    color: black;
-}
-
-#magenta {
-	background-color: darkmagenta;
-}
-#magenta:hover {
-	background-color: magenta;
-    color: black;
-}
-    </style>
-	<body>
-		<div id="section">
-        	<h1>Automatic Hand-Raiser 8000</h1>
-            <button onclick="connect()" id="connectButton">Connect to Hand Raiser</button>
-			<div id="buttons">
-            	<button onclick="sendColor('red')" class="button" id="red"></button>
-        		<button onclick="sendColor('green')" class="button" id="green"></button>
-        		<button onclick="sendColor('blue')" class="button" id="blue"></button>
-			<button onclick="sendColor('yellow')" class="button" id="yellow"></button>
-			<button onclick="sendColor('magenta')" class="button" id="magenta"></button>
-        		<button onclick="sendColor('off')" class="button" id="off"></button>
-			</div>
-		</div>
-    <script>
-      let port;
-      let writer;
-
-      async function connect() {
-        try {
-          port = await navigator.serial.requestPort();
-          await port.open({ baudRate: 115200 });
-          writer = port.writable.getWriter();
-          console.log("Connected to Trinket M0");
-        } catch (err) {
-          console.error("Failed to connect:", err);
-        }
-      }
-
-      async function sendColor(color) {
-        if (!writer) {
-          alert("Please connect to the Trinket first.");
-          return;
-        }
-	if(color == "off") {
-		document.body.style.backgroundColor = "white"
-	} else {
-		document.body.style.backgroundColor = color;
+<head>
+	<title>Hand Raiser</title>
+</head>
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+		text-align: center;
 	}
-        const data = new TextEncoder().encode(color + "\r\n");
-        await writer.write(data);
-      }
-    </script>
-	</body>
+
+	#section {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		align-items: center;
+		padding: 1rem;
+	}
+
+	#connectButton {
+		font-size: 18px;
+		padding: 10px;
+		border-radius: 0px;
+		background-color: rgb(230, 230, 230);
+		box-shadow: inset 0 0 2px 2px grey;
+	}
+
+	#connectButton:hover {
+		background-color: rgb(100, 100, 100);
+		color: white;
+	}
+
+	#buttons {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 8px;
+		width: 100%;
+		flex-shrink: inherit;
+	}
+
+	.button {
+		font-size: 18px;
+		color: white;
+		padding: 60px;
+	}
+
+	.button:hover {
+		opacity: 50%;
+		box-shadow: 2px 2px 2px 2px black;
+	}
+
+	#red {
+		background-color: red;
+	}
+
+	#green {
+		background-color: lime;
+	}
+
+	#blue {
+		background-color: cyan;
+	}
+
+	#off {
+		background-color: grey;
+	}
+
+	#yellow {
+		background-color: yellow;
+	}
+
+	#magenta {
+		background-color: magenta;
+	}
+
+	.image {
+		max-height: 150px;
+	}
+</style>
+
+<body>
+	<div id="section">
+		<h1>Automatic Hand-Raiser 8000</h1>
+		<button onclick="connect()" id="connectButton">Connect to Hand Raiser</button>
+		<div id="buttons">
+			<button onclick="sendColor('red')" class="button" id="red">
+				<img src="nurse.png" class="image">
+			</button>
+			<button onclick="sendColor('green')" class="button" id="green">
+				<img src="hand.png" class="image">
+			</button>
+			<button onclick="sendColor('blue')" class="button" id="blue">
+				<img src="toilet.png" class="image">
+			</button>
+			<button onclick="sendColor('yellow')" class="button" id="yellow">
+				<img src="question.png" class="image">
+			</button>
+			<button onclick="sendColor('magenta')" class="button" id="magenta">
+				<img src="clock.png" class="image">
+			</button>
+			<button onclick="sendColor('off')" class="button" id="off">
+				<img src="power.png" class="image">
+			</button>
+		</div>
+	</div>
+	<script>
+		let port;
+		let writer;
+
+		async function connect() {
+			try {
+				port = await navigator.serial.requestPort();
+				await port.open({ baudRate: 115200 });
+				writer = port.writable.getWriter();
+				console.log("Connected to Trinket M0");
+			} catch (err) {
+				console.error("Failed to connect:", err);
+			}
+		}
+
+		async function sendColor(color) {
+			if (!writer) {
+				alert("Please connect to the Trinket first.");
+				return;
+			}
+			if (color == "off") {
+				document.body.style.backgroundColor = "white"
+			} else {
+				document.body.style.backgroundColor = color;
+			}
+			const data = new TextEncoder().encode(color + "\r\n");
+			await writer.write(data);
+		}
+	</script>
+</body>
+
 </html>
